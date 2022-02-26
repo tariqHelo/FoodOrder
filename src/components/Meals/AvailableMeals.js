@@ -31,70 +31,73 @@ import MealItem from './MealItem/MealItem';
 // ];
 
 const AvailableMeals = () => {
-   const [meals, setmeals] = useState([]);
-   const [isLeading, setIsLeading] = useState(true);
-   const [httpError, sethttpError] = useState();
+   const [meals, setMeals] = useState([]);
+   const [isLoading, setIsLoading] = useState(true);
+   const [httpError, setHttpError] = useState();
    useEffect(() => {
      const fetchMeals = async () => {
        const response = await fetch('https://foodapp-95955-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json')
 
-       if(!response.ok){
-         throw new Error("Something went Error !");
+      if (!response.ok) {
+        throw new Error('Something went wrong!');
+      }
 
-       }
+      const responseData = await response.json();
 
-       const responsedData = await response.json();
-       const loadedMeals = [];
-       for (const key in responsedData) {
-         loadedMeals.push({
-           id:key,
-           name:responsedData[key].name,
-           description:responsedData[key].description,
-           price:responsedData[key].price,
-         });
-       }
-       setmeals(loadedMeals);
-       setIsLeading(false)
-     };
+      const loadedMeals = [];
 
-    
+      for (const key in responseData) {
+        loadedMeals.push({
+          id: key,
+          name: responseData[key].name,
+          description: responseData[key].description,
+          price: responseData[key].price,
+        });
+      }
+
+      setMeals(loadedMeals);
+      setIsLoading(false);
+    };
+
     fetchMeals().catch((error) => {
-      setIsLeading(false);
-      sethttpError(error.message)
+      setIsLoading(false);
+      setHttpError(error.message);
     });
+  }, []);
 
-   }, [])
-
-  
-  if (isLeading){
-    return <section className={classes.MealsIsLoading}>
-      Loading.....
-    </section>
-  } 
-
-  if(httpError){
-    return <section className={classes.MealsError}>
-      {httpError}
-    </section>
+  if (isLoading) {
+    return (
+      <section className={classes.MealsIsLoading}>
+        <p>Loading...</p>
+      </section>
+    );
   }
 
+  if (httpError) {
+    return (
+      <section className={classes.MealsError}>
+        <p>{httpError}</p>
+      </section>
+    );
+  }
 
-  const mealslist = meals.map((meal) => 
-    <MealItem 
-      id={meal.id}
+  const mealsList = meals.map((meal) => (
+    <MealItem
       key={meal.id}
+      id={meal.id}
       name={meal.name}
       description={meal.description}
-      price={meal.price} 
+      price={meal.price}
     />
-    )
+  ));
 
-  return <section className={classes.meals}>
-    <Card>
-      <ui>{mealslist}</ui>
-    </Card>
-  </section>
-
+  return (
+    <section className={classes.meals}>
+      <Card>
+        <ul>{mealsList}</ul>
+      </Card>
+    </section>
+  );
 };
 
-export default AvailableMeals
+export default AvailableMeals;
