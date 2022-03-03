@@ -36,7 +36,8 @@ const AvailableMeals = () => {
    const [httpError, setHttpError] = useState();
    useEffect(() => {
      const fetchMeals = async () => {
-       const response = await fetch('https://foodapp-95955-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json')
+       const response = await 
+        fetch('https://foodapp-95955-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json')
 
       if (!response.ok) {
         throw new Error('Something went wrong!');

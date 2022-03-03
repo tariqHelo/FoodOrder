@@ -14,6 +14,7 @@ const Cart = (props) => {
   const cartCtx = useContext(CartContext);
 
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
+
   const hasItems = cartCtx.items.length > 0;
 
   const cartItemRemoveHandler = (id) => {
@@ -65,7 +66,7 @@ const Cart = (props) => {
       {hasItems && (
         <button className={classes.button} onClick={orderHandler}>
           Order
-        </button>
+       </button>
       )}
     </div>
   );
